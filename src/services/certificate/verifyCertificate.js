@@ -1,42 +1,25 @@
-import { readContract } from "wagmi/actions";
-import { config } from "@/providers/WagmiProvider";
-import { contractABI } from "@/services/blockchain/contractAbi";
-import { createCertificateHash } from "./createCertificateHash";
-
 export const verifyCertificateFile = async (file) => {
+  const formData = new FormData();
+  formData.append("certificateFile", file);
+
   try {
-    const fileContentText = await file.text();
-    const certificateFileContent = JSON.parse(fileContentText);
+    const response = await fetch(
+      `/api/verify-certificate`, 
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
 
-    const nim = certificateFileContent?.studentDetails?.studentIdNumber;
-    if (!nim) {
-      throw new Error("File sertifikat tidak valid: NIM tidak ditemukan.");
+    const result = await response.json();
+
+    if (!response.ok) {
+      throw new Error(result.details || "Gagal memverifikasi sertifikat.");
     }
-    const hashToVerify = await createCertificateHash(certificateFileContent);
 
-    const isValidOnChain = await readContract(config, {
-      abi: contractABI,
-      address: process.env.NEXT_PUBLIC_CONTRACT_ADDRESS,
-      functionName: "verifyCertificate",
-      args: [nim, hashToVerify],
-    });
-
-    if (isValidOnChain) {
-      return {
-        isValid: true,
-        data: certificateFileContent,
-        dataOnChain: hashToVerify,
-        source: "Blockchain",
-      };
-    } else {
-      return {
-        isValid: false,
-        data: certificateFileContent,
-        source: "Blockchain",
-      };
-    }
+    return result;
   } catch (error) {
-    console.error("Verification error:", error);
-    throw new Error(error.message || "Terjadi kesalahan saat verifikasi.");
+    console.error("Error in verifyCertificateFile service:", error);
+    throw error;
   }
 };
