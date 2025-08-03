@@ -8,13 +8,20 @@ export async function GET(request) {
     const limit = parseInt(searchParams.get("limit") || "10", 10);
     const status = searchParams.get("status") || "";
     const transactionType = searchParams.get("transactionType") || "";
-    const studentId = searchParams.get("studentId") || "";
+    const searchQuery = searchParams.get("searchQuery") || "";
 
     let query = supabase.from("transactions").select("*", { count: "exact" });
 
     if (status) query = query.eq("status", status);
     if (transactionType) query = query.eq("transactionType", transactionType);
-    if (studentId) query = query.ilike("studentId", `%${studentId}%`);
+
+    if (searchQuery) {
+      if (searchQuery.startsWith('0x') && searchQuery.length === 66) {
+        query = query.eq('transactionHash', searchQuery);
+      } else {
+        query = query.ilike('studentId', `%${searchQuery}%`);
+      }
+    }
 
     const from = (page - 1) * limit;
     const to = from + limit - 1;

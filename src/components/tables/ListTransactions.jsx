@@ -16,13 +16,14 @@ import { Modal } from "../ui/modal";
 import { useModal } from "@/app/hooks/useModal";
 import { getTransactions } from "@/services/transaction/getTransactions";
 import Select from "../form/input/Select";
-import { ChevronDownIcon } from "@/icons";
+import { ChevronDownIcon, CopyIcon } from "@/icons";
 import Input from "../form/input/InputField";
 import Button from "../ui/button/Button";
 
 export default function ListTransactions() {
   const modal = useModal();
   const [dataModal, setDataModal] = useState([]);
+  const [isHashCopied, setIsHashCopied] = useState(false);
 
   const [apiResponse, setApiResponse] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -32,6 +33,7 @@ export default function ListTransactions() {
   const [filters, setFilters] = useState({
     status: "",
     transactionType: "",
+    searchQuery: "",
   });
 
   const [searchInput, setSearchInput] = useState("");
@@ -46,7 +48,7 @@ export default function ListTransactions() {
           limit: 10,
           status: filters.status || undefined, // Send undefined if filter is empty
           transactionType: filters.transactionType || undefined,
-          studentId: filters.studentId || undefined,
+          searchQuery: filters.searchQuery || undefined,
         });
         setApiResponse(data);
       } catch (err) {
@@ -69,13 +71,20 @@ export default function ListTransactions() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    setFilters((prev) => ({ ...prev, studentId: searchInput }));
+    setFilters((prev) => ({ ...prev, searchQuery: searchInput }));
     setCurrentPage(1);
   };
 
   const handlerModal = (data) => {
     setDataModal(data);
     modal.openModal();
+  };
+
+  const handleCopy = (textToCopy) => {
+    navigator.clipboard.writeText(textToCopy).then(() => {
+      setIsHashCopied(true);
+      setTimeout(() => setIsHashCopied(false), 2000);
+    });
   };
 
   const transactions = apiResponse?.transactions || [];
@@ -137,7 +146,7 @@ export default function ListTransactions() {
         >
           <Input
             type="text"
-            placeholder="Search by Student ID..."
+            placeholder="Search By Txn Hash or Student Id..."
             defaultValue={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             className="dark:bg-dark-900"
@@ -276,9 +285,33 @@ export default function ListTransactions() {
                 <span className="w-full font-medium text-gray-700 sm:w-32 dark:text-gray-300 mb-1 sm:mb-0">
                   Txn Hash
                 </span>
-                <span className="font-mono text-gray-600 break-all dark:text-gray-400">
-                  {dataModal.transactionHash}
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="font-mono text-gray-600 break-all dark:text-gray-400">
+                    {dataModal.transactionHash}
+                  </span>
+                  <button
+                    onClick={() => handleCopy(dataModal.transactionHash)}
+                    className="text-gray-400 hover:text-gray-600 dark:hover:text-white"
+                    title="Copy hash"
+                  >
+                    {isHashCopied ? (
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="w-5 h-5 text-green-500"
+                        viewBox="0 0 20 20"
+                        fill="currentColor"
+                      >
+                        <path
+                          fillRule="evenodd"
+                          d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                          clipRule="evenodd"
+                        />
+                      </svg>
+                    ) : (
+                      <CopyIcon className="w-5 h-5" />
+                    )}
+                  </button>
+                </div>
               </div>
 
               <div className="flex flex-col sm:flex-row">

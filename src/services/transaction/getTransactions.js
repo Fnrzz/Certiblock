@@ -2,14 +2,14 @@ import Cookies from "js-cookie";
 
 export const getTransactions = async (options = {}) => {
   try {
-    const { page = 1, limit, status, transactionType, studentId } = options;
+    const { page = 1, limit, status, transactionType, searchQuery } = options;
 
     const params = new URLSearchParams({
       page: page,
       limit: limit,
     });
     if (status) params.append("status", status);
-    if (studentId) params.append("studentId", studentId);
+    if (searchQuery) params.append("searchQuery", searchQuery);
     if (transactionType) params.append("transactionType", transactionType);
 
     const jwtToken = Cookies.get("token");
