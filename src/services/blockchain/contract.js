@@ -42,6 +42,9 @@ function getFriendlyErrorMessage(error) {
 
   // Pesan error dari simulasi sekarang akan jauh lebih informatif
   if (error.shortMessage) {
+     if (error.shortMessage.includes("UnauthorizedWallet")) {
+        return "This action can only be performed by the contract's Super Admin and Admin addresses.";
+    }
     if (error.shortMessage.includes("is missing role")) {
       return "This action can only be performed by an authorized Admin address.";
     }
