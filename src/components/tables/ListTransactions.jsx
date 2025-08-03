@@ -322,6 +322,14 @@ export default function ListTransactions() {
                 </span>
               </div>
               <div className="flex flex-col sm:flex-row">
+                <span className="w-full font-medium text-gray-700 sm:w-32 dark:text-gray-300 mb-1 sm:mb-0">
+                  Transaction Type
+                </span>
+                <span className="font-mono text-gray-600 break-all dark:text-gray-400">
+                  {dataModal.transactionType}
+                </span>
+              </div>
+              <div className="flex flex-col sm:flex-row">
                 <span className="w-full font-medium text-gray-700 sm:w-32 dark:text-gray-400">
                   Data On Chain
                 </span>

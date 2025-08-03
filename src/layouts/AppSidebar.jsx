@@ -35,11 +35,6 @@ const navItems = [
         pro: false,
       },
       {
-        name: "Check Status Certificate",
-        path: "/dashboard/certificate-management/certificate-check-status",
-        pro: false,
-      },
-      {
         name: "Verify Certificate",
         path: "/dashboard/certificate-management/certificate-verify",
         pro: false,
