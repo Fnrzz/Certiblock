@@ -26,6 +26,7 @@ export default function SignInForm() {
       const data = await loginUser(email, password);
       const experiesIn = new Date(new Date().getTime() + 4 * 60 * 60 * 1000);
 
+      localStorage.setItem("user", JSON.stringify(data.user));
       Cookies.set("token", data.jwt.token, { expires: experiesIn });
       router.push("/dashboard");
     } catch (err) {
