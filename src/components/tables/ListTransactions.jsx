@@ -13,7 +13,7 @@ import Pagination from "./Pagination";
 import { shortenHash } from "@/utils/formatters";
 import { formatDate } from "@/utils/formatDate";
 import { Modal } from "../ui/modal";
-import { useModal } from "@/app/hooks/useModal";
+import { useModal } from "@/hooks/useModal";
 import { getTransactions } from "@/services/transaction/getTransactions";
 import Select from "../form/input/Select";
 import { ChevronDownIcon, CopyIcon } from "@/icons";

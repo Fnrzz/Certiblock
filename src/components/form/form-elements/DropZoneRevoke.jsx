@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { useModal } from "@/app/hooks/useModal";
+import { useModal } from "@/hooks/useModal";
 import { Modal } from "@/components/ui/modal";
 import { CheckCircleIcon, CopyIcon } from "@/icons";
 import { revokeCertificate } from "@/services/certificate/revokeCertificate";

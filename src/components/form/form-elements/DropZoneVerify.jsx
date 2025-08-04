@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { useModal } from "@/app/hooks/useModal";
+import { useModal } from "@/hooks/useModal";
 import { Modal } from "@/components/ui/modal";
 import TextArea from "../input/TextArea";
 import { verifyCertificateFile } from "@/services/certificate/verifyCertificate";

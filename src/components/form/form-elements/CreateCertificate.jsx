@@ -4,7 +4,7 @@ import Label from "../Label";
 import Input from "../input/InputField";
 import DatePicker from "../input/DatePicker";
 import Button from "@/components/ui/button/Button";
-import { useModal } from "@/app/hooks/useModal";
+import { useModal } from "@/hooks/useModal";
 import { Modal } from "@/components/ui/modal";
 import TextArea from "../input/TextArea";
 import { CheckCircleIcon, CopyIcon, DownloadIcon } from "@/icons";
