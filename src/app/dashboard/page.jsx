@@ -1,9 +1,13 @@
+import { DashboardMetrics } from "@/components/dashboard/DashboardMetrics";
 import React from "react";
 
 const page = () => {
   return (
-    <div className="dark:text-white">
-      <h1 className="text-2xl font-bold mb-6">Dashboard</h1>
+    <div className="grid grid-cols-12 gap-4 md:gap-6">
+      <div className="col-span-12 space-y-6 xl:col-span-7">
+        <DashboardMetrics />
+        {/* <MonthlySalesChart /> */}
+      </div>
     </div>
   );
 };
