@@ -15,9 +15,8 @@ const getGraduationPredicate = (gpa) => {
 export const issueCertificate = async (studentData) => {
   try {
     const jwtToken = Cookies.get("token");
-    const user = JSON.parse(localStorage.getItem("user"));
 
-    if (!jwtToken || !user) {
+    if (!jwtToken) {
       throw new Error("Admin authentication token not found.");
     }
 

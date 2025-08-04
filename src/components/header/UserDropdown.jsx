@@ -36,8 +36,6 @@ export default function UserDropdown() {
 
   function handleSignOut() {
     disconnect();
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
     Cookies.remove("token");
     router.push("/");
   }

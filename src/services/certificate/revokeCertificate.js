@@ -24,9 +24,8 @@ const getNimFromFile = (file) => {
 export const revokeCertificate = async (file) => {
   try {
     const jwtToken = Cookies.get("token");
-    const user = JSON.parse(localStorage.getItem("user"));
 
-    if (!jwtToken || !user) {
+    if (!jwtToken) {
       throw new Error("Admin authentication token not found.");
     }
 

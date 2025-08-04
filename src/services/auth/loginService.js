@@ -14,15 +14,7 @@ export const loginUser = async (email, password) => {
       );
     }
 
-    const user = {
-      id: authData.user.id,
-      email: authData.user.email,
-      role: authData.user.role || "USER",
-      name: authData.user.user_metadata.display_name,
-    };
-
     return {
-      user,
       jwt: {
         token: authData.session.access_token,
       },

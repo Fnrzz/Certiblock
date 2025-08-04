@@ -13,8 +13,7 @@ import {
   UserCircleIcon,
 } from "@/icons";
 
-// Hanya navItems yang digunakan
-const navItems = [
+const allNavItems = [
   {
     icon: <GridIcon />,
     name: "Dashboard",
@@ -32,33 +31,29 @@ const navItems = [
       {
         name: "Create Certificate",
         path: "/dashboard/certificate-management/certificate-create",
-        pro: false,
       },
       {
         name: "Verify Certificate",
         path: "/dashboard/certificate-management/certificate-verify",
-        pro: false,
       },
       {
         name: "Revoke Certificate",
         path: "/dashboard/certificate-management/certificate-revoke",
-        pro: false,
       },
     ],
   },
   {
     icon: <UserCircleIcon />,
     name: "User Management",
+    role: "SUPERADMIN", // <-- Tambahkan properti role di sini
     subItems: [
       {
         name: "User Create",
         path: "/dashboard/user-management/user-create",
-        pro: false,
       },
       {
-        name: "User Pending",
-        path: "/dashboard/user-management/user-pending",
-        pro: false,
+        name: "User Role",
+        path: "/dashboard/user-management/user-role",
       },
     ],
   },
@@ -71,9 +66,30 @@ const AppSidebar = () => {
   const [subMenuHeight, setSubMenuHeight] = useState({});
   const subMenuRefs = useRef({});
 
+  const [userRole, setUserRole] = useState(null);
+  const [navItems, setNavItems] = useState([]);
+
+  useEffect(() => {
+    const userString = localStorage.getItem("user");
+    if (userString) {
+      const userData = JSON.parse(userString);
+      setUserRole(userData.role);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (userRole) {
+      const filteredItems = allNavItems.filter((item) => {
+        return !item.role || item.role === userRole;
+      });
+      setNavItems(filteredItems);
+    } else {
+      setNavItems(allNavItems.filter((item) => !item.role));
+    }
+  }, [userRole]);
+
   const isActive = useCallback((path) => path === pathname, [pathname]);
 
-  // useEffect disederhanakan, hanya memeriksa navItems
   useEffect(() => {
     let submenuMatched = false;
     navItems.forEach((nav, index) => {
@@ -93,7 +109,7 @@ const AppSidebar = () => {
     if (!submenuMatched) {
       setOpenSubmenu(null);
     }
-  }, [pathname, isActive]);
+  }, [pathname, isActive, navItems]);
 
   useEffect(() => {
     if (openSubmenu !== null) {
@@ -296,7 +312,6 @@ const AppSidebar = () => {
               </h2>
               {renderMenuItems(navItems, "main")}
             </div>
-            {/* Bagian "Others" telah dihapus dari sini */}
           </div>
         </nav>
       </div>
