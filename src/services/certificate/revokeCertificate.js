@@ -1,7 +1,6 @@
 import { getAccount } from "wagmi/actions";
 import { revokeCertificateOnChain } from "../blockchain/contract";
 import { config } from "@/providers/WagmiProvider";
-import Cookies from "js-cookie";
 
 const getNimFromFile = (file) => {
   return new Promise((resolve, reject) => {
@@ -23,12 +22,6 @@ const getNimFromFile = (file) => {
 
 export const revokeCertificate = async (file) => {
   try {
-    const jwtToken = Cookies.get("token");
-
-    if (!jwtToken) {
-      throw new Error("Admin authentication token not found.");
-    }
-
     const account = getAccount(config);
     if (!account.isConnected) {
       throw new Error(

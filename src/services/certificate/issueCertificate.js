@@ -1,4 +1,3 @@
-import Cookies from "js-cookie";
 import { issueCertificateOnChain } from "../blockchain/contract"; // Panggil service blockchain
 import { getAccount } from "wagmi/actions";
 import { config } from "@/providers/WagmiProvider";
@@ -14,12 +13,6 @@ const getGraduationPredicate = (gpa) => {
 
 export const issueCertificate = async (studentData) => {
   try {
-    const jwtToken = Cookies.get("token");
-
-    if (!jwtToken) {
-      throw new Error("Admin authentication token not found.");
-    }
-
     const account = getAccount(config);
     if (!account.isConnected) {
       throw new Error(

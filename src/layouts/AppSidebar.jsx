@@ -12,6 +12,7 @@ import {
   TaskIcon,
   UserCircleIcon,
 } from "@/icons";
+import { createClient } from "@/utils/supabase/supabaseServer";
 
 const allNavItems = [
   {
@@ -70,11 +71,17 @@ const AppSidebar = () => {
   const [navItems, setNavItems] = useState([]);
 
   useEffect(() => {
-    const userString = localStorage.getItem("user");
-    if (userString) {
-      const userData = JSON.parse(userString);
-      setUserRole(userData.role);
-    }
+    const fetchUserRole = async () => {
+      const supabase = createClient();
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+      if (user) {
+        setUserRole(user.role);
+      }
+    };
+
+    fetchUserRole();
   }, []);
 
   useEffect(() => {

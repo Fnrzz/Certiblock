@@ -1,5 +1,3 @@
-import Cookies from "js-cookie";
-
 export const getTransactions = async (options = {}) => {
   try {
     const { page = 1, limit, status, transactionType, searchQuery } = options;
@@ -11,11 +9,6 @@ export const getTransactions = async (options = {}) => {
     if (status) params.append("status", status);
     if (searchQuery) params.append("searchQuery", searchQuery);
     if (transactionType) params.append("transactionType", transactionType);
-
-    const jwtToken = Cookies.get("token");
-    if (!jwtToken) {
-      throw new Error("Admin authentication token not found.");
-    }
 
     const response = await fetch(`/api/transactions?${params.toString()}`, {
       method: "GET",

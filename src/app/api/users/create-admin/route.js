@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "@/utils/supabase/supabaseClient";
 
 export async function POST(request) {
   try {
@@ -18,13 +18,14 @@ export async function POST(request) {
     } = await supabase.auth.admin.createUser({
       email: email,
       password: password,
+      role: "ADMIN",
       email_confirm: true,
       user_metadata: { display_name: displayName },
     });
 
-    if (error) throw error;
-
-    await supabase.from("users").update({ role: "ADMIN" }).eq("id", user.id);
+    if (error) {
+      return NextResponse.json({ message: error.message }, { status: 500 });
+    }
 
     return NextResponse.json(
       { message: `User admin ${user.email} berhasil dibuat.` },

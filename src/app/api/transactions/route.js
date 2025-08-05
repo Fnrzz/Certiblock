@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { supabase } from "@/lib/supabaseClient"; // Pastikan Anda mengimpor klien ADMIN
+import { supabase } from "@/utils/supabase/supabaseClient";
 
 export async function GET(request) {
   try {
@@ -16,10 +16,10 @@ export async function GET(request) {
     if (transactionType) query = query.eq("transactionType", transactionType);
 
     if (searchQuery) {
-      if (searchQuery.startsWith('0x') && searchQuery.length === 66) {
-        query = query.eq('transactionHash', searchQuery);
+      if (searchQuery.startsWith("0x") && searchQuery.length === 66) {
+        query = query.eq("transactionHash", searchQuery);
       } else {
-        query = query.ilike('studentId', `%${searchQuery}%`);
+        query = query.ilike("studentId", `%${searchQuery}%`);
       }
     }
 
@@ -33,7 +33,6 @@ export async function GET(request) {
     if (error) {
       throw new Error(error.message);
     }
-
     const totalPages = Math.ceil(count / limit);
 
     return NextResponse.json({

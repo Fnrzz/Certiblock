@@ -1,6 +1,7 @@
-import { supabase } from "@/lib/supabaseClient";
+import { createClient } from "@/utils/supabase/supabaseServer";
 
 export const loginUser = async (email, password) => {
+  const supabase = createClient();
   try {
     const { data: authData, error: authError } =
       await supabase.auth.signInWithPassword({
@@ -23,9 +24,6 @@ export const loginUser = async (email, password) => {
 
     return {
       user,
-      jwt: {
-        token: authData.session.access_token,
-      },
     };
   } catch (error) {
     throw error;

@@ -1,11 +1,10 @@
 "use client";
-import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
 import { useRouter } from "next/navigation";
-import Cookies from "js-cookie";
 import { useDisconnect } from "wagmi";
+import { signOut } from "@/services/auth/signOutService";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,12 +33,11 @@ export default function UserDropdown() {
     setIsOpen(false);
   }
 
-  function handleSignOut() {
+  const handleSignOut = async () => {
+    await signOut();
     disconnect();
-    localStorage.removeItem("user");
-    Cookies.remove("token");
-    router.push("/");
-  }
+    window.location.href = "/";
+  };
   return (
     <div className="relative">
       <button

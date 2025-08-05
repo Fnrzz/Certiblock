@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import crypto from "crypto";
 import { decodeEventLog, formatEther, hexToBigInt } from "viem";
 import { contractABI } from "@/services/blockchain/contractAbi"; // Pastikan path ini benar
-import { supabase } from "@/lib/supabaseClient";
+import { supabase } from "@/utils/supabase/supabaseClient";
 
 function isValidSignature(body, signature, authToken) {
   const hmac = crypto.createHmac("sha256", authToken);
