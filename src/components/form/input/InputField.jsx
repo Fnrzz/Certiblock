@@ -42,6 +42,7 @@ const Input = ({
         step={step}
         disabled={disabled}
         className={inputClasses}
+        required
       />
 
       {/* Teks Petunjuk Opsional */}
