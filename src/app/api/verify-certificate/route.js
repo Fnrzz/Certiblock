@@ -51,7 +51,7 @@ export async function POST(request) {
         {
           isValid: false,
           details:
-            "Verification Failed: File contents do not match or certificate has been revoked.",
+            "File contents do not match or certificate has been revoked.",
         },
         { status: 400 }
       );
