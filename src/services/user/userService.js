@@ -1,27 +1,51 @@
-export const getPendingUsers = async (apiKey) => {
+import { config } from "@/providers/WagmiProvider";
+import { getAccount } from "wagmi/actions";
+import { addAdminOnChain, removeAdminOnChain } from "../blockchain/contract";
+
+export const addAdminWallet = async (walletAddress) => {
   try {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/users/pending`,
-      {
-        method: "GET",
-        headers: {
-          "x-api-key": apiKey,
-          "Content-Type": "application/json",
-        },
-      }
-    );
-
-    const data = await response.json();
-
-    if (!response.ok) {
-      // Lemparkan error dengan pesan dari API jika ada, atau pesan default
-      throw new Error(data.message || "Gagal mengambil data pengguna pending.");
+    const account = getAccount(config);
+    if (!account.isConnected) {
+      throw new Error(
+        "Wallet not connected. Please connect your wallet first."
+      );
     }
 
-    return data.users || [];
+    if (!walletAddress) {
+      throw new Error("Alamat Wallet harus diisi.");
+    }
+
+    const txHash = await addAdminOnChain(walletAddress);
+
+    return {
+      status: "SUCCESS",
+      transactionHash: txHash,
+    };
   } catch (error) {
-    console.error("Error di service getPendingUsers:", error);
-    // Lemparkan kembali error agar bisa ditangani oleh komponen
+    throw error;
+  }
+};
+
+export const removeAdminWallet = async (walletAddress) => {
+  try {
+    const account = getAccount(config);
+    if (!account.isConnected) {
+      throw new Error(
+        "Wallet not connected. Please connect your wallet first."
+      );
+    }
+
+    if (!walletAddress) {
+      throw new Error("Alamat Wallet harus diisi.");
+    }
+
+    const txHash = await removeAdminOnChain(walletAddress);
+
+    return {
+      status: "SUCCESS",
+      transactionHash: txHash,
+    };
+  } catch (error) {
     throw error;
   }
 };

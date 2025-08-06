@@ -1,12 +1,12 @@
 import ComponentCard from "@/components/common/ComponentCard";
-import UserPendingTable from "@/components/tables/UserPendingTable";
+import AddWalletUser from "@/components/form/form-elements/AddWalletUser";
 import React from "react";
 
 export default function page() {
   return (
     <div className="space-y-6">
-      <ComponentCard title="User Pending">
-        <UserPendingTable />
+      <ComponentCard title="Add User Wallet">
+        <AddWalletUser />
       </ComponentCard>
     </div>
   );

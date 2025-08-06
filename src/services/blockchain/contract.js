@@ -4,6 +4,36 @@ import { contractABI } from "./contractAbi";
 
 const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
 
+export const addAdminOnChain = async (walletAddress) => {
+  try {
+    const { request } = await simulateContract(config, {
+      address: contractAddress,
+      abi: contractABI,
+      functionName: "addAdmin",
+      args: [walletAddress],
+    });
+    const hash = await writeContract(config, request);
+    return hash;
+  } catch (error) {
+    throw new Error(getFriendlyErrorMessage(error));
+  }
+};
+
+export const removeAdminOnChain = async (walletAddress) => {
+  try {
+    const { request } = await simulateContract(config, {
+      address: contractAddress,
+      abi: contractABI,
+      functionName: "removeAdmin",
+      args: [walletAddress],
+    });
+    const hash = await writeContract(config, request);
+    return hash;
+  } catch (error) {
+    throw error;
+  }
+};
+
 export const issueCertificateOnChain = async (nim, certificateHash) => {
   try {
     const { request } = await simulateContract(config, {
@@ -42,8 +72,8 @@ function getFriendlyErrorMessage(error) {
 
   // Pesan error dari simulasi sekarang akan jauh lebih informatif
   if (error.shortMessage) {
-     if (error.shortMessage.includes("UnauthorizedWallet")) {
-        return "This action can only be performed by the contract's Super Admin and Admin addresses.";
+    if (error.shortMessage.includes("UnauthorizedWallet")) {
+      return "This action can only be performed by the contract's Super Admin and Admin addresses.";
     }
     if (error.shortMessage.includes("is missing role")) {
       return "This action can only be performed by an authorized Admin address.";

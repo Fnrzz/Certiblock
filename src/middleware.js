@@ -31,24 +31,19 @@ export async function middleware(request) {
   );
 
   const {
-    data: { session },
-  } = await supabase.auth.getSession();
+    data: { user },
+  } = await supabase.auth.getUser();
   const { pathname } = request.nextUrl;
 
-  console.log(
-    "Sesi di Middleware:",
-    session ? `ada sesi untuk ${session.user.email}` : "null"
-  );
-
-  if (!session && pathname.startsWith("/dashboard")) {
+  if (!user && pathname.startsWith("/dashboard")) {
     return NextResponse.redirect(new URL("/", request.url));
   }
-  if (session && pathname === "/") {
+  if (user && pathname === "/") {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
-  if (session && pathname.startsWith("/dashboard/user-management")) {
-    if (session.user?.role !== "SUPERADMIN") {
+  if (user && pathname.startsWith("/dashboard/admin-management")) {
+    if (user.role !== "SUPERADMIN") {
       return NextResponse.redirect(new URL("/dashboard", request.url));
     }
   }

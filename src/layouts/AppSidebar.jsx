@@ -45,16 +45,20 @@ const allNavItems = [
   },
   {
     icon: <UserCircleIcon />,
-    name: "User Management",
+    name: "Admin Management",
     role: "SUPERADMIN", // <-- Tambahkan properti role di sini
     subItems: [
       {
-        name: "User Create",
-        path: "/dashboard/user-management/user-create",
+        name: "Create Admin",
+        path: "/dashboard/admin-management/create-admin",
       },
       {
-        name: "User Role",
-        path: "/dashboard/user-management/user-role",
+        name: "Add Wallet Admin",
+        path: "/dashboard/admin-management/create-wallet-admin",
+      },
+      {
+        name: "Remove Wallet Admin",
+        path: "/dashboard/admin-management/remove-wallet-admin",
       },
     ],
   },

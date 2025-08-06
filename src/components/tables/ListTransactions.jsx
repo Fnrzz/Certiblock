@@ -227,7 +227,7 @@ export default function ListTransactions() {
                       {shortenHash(order.originWallet, 10, 4)}
                     </TableCell>
                     <TableCell className="whitespace-nowrap px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                      {order.studentId}
+                      {order.studentId ? order.studentId : "N/A"}
                     </TableCell>
                     <TableCell className="whitespace-nowrap px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                       <Badge

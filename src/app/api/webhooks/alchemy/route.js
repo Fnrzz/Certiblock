@@ -130,6 +130,71 @@ export async function POST(request) {
           } else {
             console.log("✅ Transaksi berhasil disimpan.");
           }
+        } else if (eventName === "RoleGranted") {
+          const { account } = args;
+          const timestamp = block.timestamp;
+          const { error: insertWallet } = await supabase
+            .from("admin_wallets")
+            .insert({
+              walletAddress: account,
+            });
+
+          if (insertWallet) {
+            console.error("❌ Error saat menyimpan wallet:", insertWallet);
+          } else {
+            console.log("✅ Wallet berhasil disimpan.");
+          }
+
+          const { error: insertTransaction } = await supabase
+            .from("transactions")
+            .insert({
+              transactionHash: transactionHash,
+              transactionType: "GRANT_ROLE",
+              status: "SUCCESS",
+              blockNumber: blockNumber,
+              transactionFee: transactionFeeInPol,
+              certificateHashOnchain: account,
+              confirmedAt: new Date(Number(timestamp) * 1000),
+              originWallet: originWallet,
+            });
+
+          if (insertTransaction) {
+            console.error("❌ Error saat menyimpan transaksi:", insertError);
+          } else {
+            console.log("✅ Transaksi berhasil disimpan.");
+          }
+        } else if (eventName === "RoleRevoked") {
+          const { account } = args;
+          const timestamp = block.timestamp;
+          const { error: deleteWallet } = await supabase
+            .from("admin_wallets")
+            .delete()
+            .eq("walletAddress", account);
+
+          if (deleteWallet) {
+            console.error("❌ Error saat menghapus wallet:", deleteWallet);
+          } else {
+            console.log("✅ Wallet berhasil dihapus.");
+          }
+
+          const { error: insertTransaction } = await supabase
+            .from("transactions")
+            .insert({
+              transactionHash: transactionHash,
+              transactionType: "REVOKE_ROLE",
+              status: "SUCCESS",
+              blockNumber: blockNumber,
+              transactionFee: transactionFeeInPol,
+              certificateHashOnchain: account,
+              confirmedAt: new Date(Number(timestamp) * 1000),
+              originWallet: originWallet,
+            });
+
+          if (insertTransaction) {
+            console.error("❌ Error saat menyimpan transaksi:", insertError);
+          } else {
+            console.log("✅ Transaksi berhasil disimpan.");
+          }
         }
       } catch (decodeError) {
         console.log("Mengabaikan event yang tidak relevan.", decodeError);
