@@ -26,7 +26,7 @@ export async function POST(request) {
 
     const nim = certificateFileContent?.studentDetails?.studentIdNumber;
     if (!nim) {
-      throw new Error("File sertifikat tidak valid: NIM tidak ditemukan.");
+      throw new Error("Invalid certificate file: NIM not found.");
     }
 
     const hashToVerify = await createCertificateHash(certificateFileContent);
@@ -43,7 +43,7 @@ export async function POST(request) {
         isValid: true,
         data: certificateFileContent,
         dataOnChain: hashToVerify,
-        message: "Sertifikat Terverifikasi!",
+        message: "Verified Certificate!",
         source: "Blockchain",
       });
     } else {
@@ -51,7 +51,7 @@ export async function POST(request) {
         {
           isValid: false,
           details:
-            "Verifikasi Gagal: Konten file tidak cocok atau sertifikat telah dicabut.",
+            "Verification Failed: File contents do not match or certificate has been revoked.",
         },
         { status: 400 }
       );
@@ -59,7 +59,7 @@ export async function POST(request) {
   } catch (error) {
     console.error("API Verify Error:", error);
     return NextResponse.json(
-      { details: "Terjadi kesalahan internal saat verifikasi." },
+      { details: "An internal error occurred during verification." },
       { status: 500 }
     );
   }
