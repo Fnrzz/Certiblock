@@ -15,7 +15,7 @@ export const addAdminOnChain = async (walletAddress) => {
     const hash = await writeContract(config, request);
     return hash;
   } catch (error) {
-    throw new Error(getFriendlyErrorMessage(error));
+    throw new Error(getRevertReason(error));
   }
 };
 
@@ -30,7 +30,7 @@ export const removeAdminOnChain = async (walletAddress) => {
     const hash = await writeContract(config, request);
     return hash;
   } catch (error) {
-    throw error;
+    throw new Error(getRevertReason(error));
   }
 };
 
@@ -45,7 +45,7 @@ export const issueCertificateOnChain = async (nim, certificateHash) => {
     const hash = await writeContract(config, request);
     return hash;
   } catch (error) {
-    throw new Error(getFriendlyErrorMessage(error));
+    throw new Error(getRevertReason(error));
   }
 };
 
@@ -61,43 +61,26 @@ export const revokeCertificateOnChain = async (nim) => {
     const hash = await writeContract(config, request);
     return hash;
   } catch (error) {
-    throw new Error(getFriendlyErrorMessage(error));
+    throw new Error(getRevertReason(error));
   }
 };
 
-function getFriendlyErrorMessage(error) {
+const getRevertReason = (error) => {
   if (error.name === "UserRejectedRequestError") {
-    return "Transaction was rejected by the user in their wallet.";
+    return "Transaction was rejected by the user.";
   }
 
-  // Pesan error dari simulasi sekarang akan jauh lebih informatif
+  if (error.cause && error.cause.reason) {
+    return error.cause.reason;
+  }
+
   if (error.shortMessage) {
-    if (error.shortMessage.includes("UnauthorizedWallet")) {
-      return "This action can only be performed by the contract's Super Admin and Admin addresses.";
+    const match = error.shortMessage.match(/Reason: (.*)/);
+    if (match && match[1]) {
+      return match[1];
     }
-    if (error.shortMessage.includes("is missing role")) {
-      return "This action can only be performed by an authorized Admin address.";
-    }
-    if (
-      error.shortMessage.includes(
-        "An active certificate for this NIM already exists"
-      )
-    ) {
-      return "This Student ID already has an active certificate.";
-    }
-    if (
-      error.shortMessage.includes("Certificate for this NIM does not exist")
-    ) {
-      return "Cannot revoke: A certificate for this Student ID does not exist.";
-    }
-    if (error.shortMessage.includes("insufficient funds")) {
-      return "Insufficient funds for gas fee.";
-    }
-    const reasonMatch = error.shortMessage.match(/Reason: (.*)/);
-    if (reasonMatch && reasonMatch[1]) {
-      return reasonMatch[1];
-    }
+    return error.shortMessage;
   }
 
-  return "An unknown error occurred during the blockchain transaction.";
-}
+  return "An unknown blockchain error occurred.";
+};

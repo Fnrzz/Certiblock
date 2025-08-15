@@ -171,7 +171,7 @@ const AddWalletUser = () => {
           </div>
 
           <h4 className="mb-2 text-2xl font-semibold text-gray-800 dark:text-white/90 sm:text-title-sm">
-            Cannot Revoke!
+            Cannot Add Wallet!
           </h4>
           <p className="text-sm leading-6 text-gray-500 dark:text-gray-400">
             {error}

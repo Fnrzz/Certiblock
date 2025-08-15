@@ -6,6 +6,7 @@ import { EyeIcon, EyeCloseIcon } from "@/icons";
 import Label from "../Label";
 import { useModal } from "@/hooks/useModal";
 import { Modal } from "@/components/ui/modal";
+import { addUsers } from "@/services/user/userService";
 
 export default function CreateUser() {
   const [showPassword, setShowPassword] = useState(false);
@@ -20,19 +21,15 @@ export default function CreateUser() {
     setError(null);
 
     try {
-      const response = await fetch("/api/users/create-admin", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: e.target.email.value,
-          password: e.target.password.value,
-          displayName: e.target.fullName.value,
-        }),
-      });
-      const data = await response.json();
-      if (!response.ok) throw new Error(data.message);
+      const data = {
+        email: e.target.email.value,
+        password: e.target.password.value,
+        displayName: e.target.fullName.value,
+      };
+      const result = await addUsers(data);
+      if (result.error) {
+        throw new Error(result.error);
+      }
       successModal.openModal();
       e.target.reset();
     } catch (err) {

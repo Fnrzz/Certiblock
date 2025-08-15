@@ -42,7 +42,10 @@ export async function middleware(request) {
     return NextResponse.redirect(new URL("/dashboard", request.url));
   }
 
-  if (user && pathname.startsWith("/dashboard/admin-management")) {
+  if (
+    (user && pathname.startsWith("/dashboard/admin-management")) ||
+    pathname.startsWith("/dashboard/wallet-management")
+  ) {
     if (user.role !== "SUPERADMIN") {
       return NextResponse.redirect(new URL("/dashboard", request.url));
     }

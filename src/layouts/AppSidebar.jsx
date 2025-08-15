@@ -7,10 +7,12 @@ import { useSidebar } from "@/context/SidebarContext";
 import {
   ChevronDownIcon,
   DocsIcon,
+  DollarLineIcon,
   GridIcon,
   HorizontaLDots,
   TaskIcon,
   UserCircleIcon,
+  WalletIcon,
 } from "@/icons";
 import { createClient } from "@/utils/supabase/supabaseServer";
 
@@ -46,19 +48,34 @@ const allNavItems = [
   {
     icon: <UserCircleIcon />,
     name: "Admin Management",
-    role: "SUPERADMIN", // <-- Tambahkan properti role di sini
+    role: "SUPERADMIN",
     subItems: [
       {
+        name: "List Admin",
+        path: "/dashboard/admin-management/list",
+      },
+      {
         name: "Create Admin",
-        path: "/dashboard/admin-management/create-admin",
+        path: "/dashboard/admin-management/create",
+      },
+    ],
+  },
+  {
+    icon: <DollarLineIcon />,
+    name: "Wallet Management",
+    role: "SUPERADMIN",
+    subItems: [
+      {
+        name: "List Wallet",
+        path: "/dashboard/wallet-management/list",
       },
       {
-        name: "Add Wallet Admin",
-        path: "/dashboard/admin-management/create-wallet-admin",
+        name: "Add Wallet",
+        path: "/dashboard/wallet-management/create",
       },
       {
-        name: "Remove Wallet Admin",
-        path: "/dashboard/admin-management/remove-wallet-admin",
+        name: "Remove Wallet",
+        path: "/dashboard/wallet-management/remove",
       },
     ],
   },
