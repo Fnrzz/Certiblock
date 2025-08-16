@@ -3,13 +3,10 @@ export const verifyCertificateFile = async (file) => {
   formData.append("certificateFile", file);
 
   try {
-    const response = await fetch(
-      `/api/verify-certificate`, 
-      {
-        method: "POST",
-        body: formData,
-      }
-    );
+    const response = await fetch(`/api/verify-certificate`, {
+      method: "POST",
+      body: formData,
+    });
 
     const result = await response.json();
 
@@ -19,7 +16,6 @@ export const verifyCertificateFile = async (file) => {
 
     return result;
   } catch (error) {
-    console.error("Error in verifyCertificateFile service:", error);
     throw error;
   }
 };
