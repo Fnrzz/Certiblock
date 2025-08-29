@@ -20,6 +20,23 @@ const getNimFromFile = (file) => {
   });
 };
 
+const verifyData = async (file) => {
+  const formData = new FormData();
+  formData.append("certificateFile", file);
+  const response = await fetch(`/api/verify-certificate`, {
+    method: "POST",
+    body: formData,
+  });
+
+  const result = await response.json();
+  if (!response.ok) {
+    throw new Error(
+      "Certificate data is not valid or not found on the blockchain."
+    );
+  }
+  return result;
+};
+
 export const revokeCertificate = async (file) => {
   try {
     const account = getAccount(config);
@@ -28,8 +45,8 @@ export const revokeCertificate = async (file) => {
         "Wallet not connected. Please connect your wallet first."
       );
     }
+    await verifyData(file);
     const nimToRevoke = await getNimFromFile(file);
-
     const txHash = await revokeCertificateOnChain(nimToRevoke);
 
     return {

@@ -4,7 +4,7 @@ import { addAdminOnChain, removeAdminOnChain } from "../blockchain/contract";
 
 export const getUsers = async () => {
   try {
-    const response = await fetch(`/api/users/list-admin`, {
+    const response = await fetch(`/api/users/list`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -24,7 +24,7 @@ export const getUsers = async () => {
 
 export const addUsers = async (request) => {
   try {
-    const response = await fetch("/api/users/create-admin", {
+    const response = await fetch("/api/users/create", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
