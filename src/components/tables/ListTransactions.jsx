@@ -363,7 +363,7 @@ export default function ListTransactions() {
                 </span>
               </div>
               <div className="flex flex-col sm:flex-row">
-                <span className="w-full font-medium text-gray-700 sm:w-32 dark:text-gray-400">
+                <span className="w-full font-medium text-gray-700 sm:w-32 dark:text-gray-300">
                   Data On Chain
                 </span>
                 <span className="text-gray-600 break-all dark:text-gray-400">
@@ -373,7 +373,7 @@ export default function ListTransactions() {
                 </span>
               </div>
               <div className="flex flex-col sm:flex-row">
-                <span className="w-full font-medium text-gray-700 sm:w-32 dark:text-gray-400">
+                <span className="w-full font-medium text-gray-700 sm:w-32 dark:text-gray-300">
                   Txn fee
                 </span>
                 <span className="text-gray-600 dark:text-gray-400">

@@ -25,7 +25,7 @@ export default function BalanceDisplay() {
   }
 
   return (
-    <div className="w-full">
+    <div className="w-full text-gray-600 dark:text-gray-200">
       {isLoading ? (
         <span>Loading...</span>
       ) : (
