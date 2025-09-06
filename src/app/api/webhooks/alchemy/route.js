@@ -105,11 +105,19 @@ export async function POST(request) {
               })
               .eq("id", certificateToRevoke.id);
 
-            if (updateError)
-              throw new Error(`Supabase update error: ${updateError.message}`);
+            if (updateError) throw new Error(`Supabase update error`);
             console.log(
               `✅ Status sertifikat untuk NIM ${nim} berhasil diubah menjadi REVOKED.`
             );
+          }
+
+          const { error: deleteError } = await supabase
+            .from("certificate_files")
+            .delete()
+            .eq("student_id_number", nim);
+
+          if (deleteError) {
+            console.error(`Supabase update error`, deleteError.message);
           }
 
           const { error: insertError } = await supabase

@@ -9,7 +9,8 @@ import { Modal } from "@/components/ui/modal";
 import TextArea from "../input/TextArea";
 import { CheckCircleIcon, CopyIcon, DownloadIcon } from "@/icons";
 import { issueCertificate } from "@/services/certificate/issueCertificate";
-import { downloadJsonFile } from "@/utils/fileDownloader";
+import { downloadCertificateByNIM } from "@/services/certificate/downloadCertificate";
+import { uploadCertificateFile } from "@/services/certificate/uploadCertificate";
 
 export default function CreateCertificate() {
   const successModal = useModal();
@@ -35,6 +36,12 @@ export default function CreateCertificate() {
       // Panggil service
       const result = await issueCertificate(studentData);
       setSubmissionResult(result);
+
+      const studentID = result.certificateData.studentDetails.studentIdNumber;
+      const fileName = `certificate-${studentID}.json`;
+
+      await uploadCertificateFile(result.certificateData, fileName);
+
       successModal.openModal();
       e.target.reset();
     } catch (err) {
@@ -62,14 +69,9 @@ export default function CreateCertificate() {
       });
   };
 
-  const handleDownloadJson = () => {
-    if (!submissionResult?.certificateData) return;
-    const certificateData = submissionResult.certificateData;
-    const studentName = certificateData.studentDetails.fullName || "unknown";
-    const studentID =
-      certificateData.studentDetails.studentIdNumber || "unknown";
-    const fileName = `certificate-${studentName} (${studentID}).json`;
-    downloadJsonFile(submissionResult.certificateData, fileName);
+  const handleDownloadJson = async (studentIdNumber) => {
+    if (!studentIdNumber) return;
+    await downloadCertificateByNIM(studentIdNumber);
   };
 
   const handleConfirmAndCloseAll = () => {
@@ -216,7 +218,11 @@ export default function CreateCertificate() {
             Output JSON :
           </h6>
           <button
-            onClick={handleDownloadJson}
+            onClick={() =>
+              handleDownloadJson(
+                submissionResult.certificateData.studentDetails.studentIdNumber
+              )
+            }
             className="text-gray-400 hover:text-gray-600"
           >
             <DownloadIcon className="w-5 h-5" />
